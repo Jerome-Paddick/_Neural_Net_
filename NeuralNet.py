@@ -10,8 +10,6 @@ import numpy as np
 #   Ic -< H3 -< Oz
 #   b1    b2
 
-# asdfasdfasdf
-
 #   Ia x (Wa1 Wa2 Wa3) = H1
 #   Ib x (Wb1 Wb2 Wb3) = H2
 #   Ic x (Wc1 Wc2 Wc3) = H3
