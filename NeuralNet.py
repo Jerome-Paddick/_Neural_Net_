@@ -22,15 +22,15 @@ import numpy as np
    |_|               |_|
    | |               | |
    \ \              / /
-   
+
 """
 
 
-a = np.array([[1, 2, 3]]).T
-print(a)
-b = np.ones((3,3))
-
-print( a+b )
+# a = np.array([[1, 2, 3]]).T
+# print(a)
+# b = np.ones((3,3))
+#
+# print( a+b )
 # b = np.array("")
 
 def evendist(len):
@@ -38,14 +38,16 @@ def evendist(len):
 
 def sig(input):
     """Returns list of sigmoid functions for input list"""
-    return [  1 / (1 + np.exp(-z)) for z in input   ]
+    return np.array([  1 / (1 + np.exp(-z)) for z in input   ])
 
 
 input_lists = [[1, 10, 100]]
-b1 = 0.5
-b2 = 0.5
+b1 = 0.35
+b2 = 0.60
 length = len(input_lists[0])
 l1_weights = evendist(length)
+
+li_weights = np.array([[0.15,0.2],[]])
 
 
 for input_list in input_lists:
@@ -56,10 +58,12 @@ for input_list in input_lists:
     # print(l1_weights[:, 1])
     # print(l1_weights[1, :])
 
-    forward_pass_input_layer = (np.multiply(in_np, l1_weights))
-    hidden = sig(forward_pass_input_layer.sum(axis=1))
-    print(hidden)
-    print(np.array(hidden) + b1)
+    net_fwd_in = np.multiply(in_np, l1_weights).sum(axis=1) + b1
+    out_fwd_in = sig(net_fwd_in)
+    print(net_fwd_in, type(net_fwd_in))
+    print(out_fwd_in, type(out_fwd_in))
+
+
 
 
     # ran = (np.random.random_sample(size=(1,5)) - 0.5)*2
