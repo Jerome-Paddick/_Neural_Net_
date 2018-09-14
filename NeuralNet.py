@@ -26,8 +26,12 @@ import numpy as np
 """
 
 
-a = np.array([1, 2, 3])
-b = np.array([[]])
+a = np.array([[1, 2, 3]]).T
+print(a)
+b = np.ones((3,3))
+
+print( a+b )
+# b = np.array("")
 
 def evendist(len):
     return np.array(np.array_split([x/((len**2)-1) for x in range(len**2)], len))
@@ -52,11 +56,10 @@ for input_list in input_lists:
     # print(l1_weights[:, 1])
     # print(l1_weights[1, :])
 
-    # input_layer = np.
-
-    forward_input_layer = (np.multiply(in_np, l1_weights))
-    hidden = sig(forward_input_layer.sum(axis=1))
+    forward_pass_input_layer = (np.multiply(in_np, l1_weights))
+    hidden = sig(forward_pass_input_layer.sum(axis=1))
     print(hidden)
+    print(np.array(hidden) + b1)
 
 
     # ran = (np.random.random_sample(size=(1,5)) - 0.5)*2
