@@ -1,5 +1,6 @@
 import numpy as np
 
+# asdfasdfasdf
 # http://neuralnetworksanddeeplearning.com/chap1.html
 # https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
 
@@ -91,30 +92,10 @@ for input_array in input_arrays:
     # print("Error", Error)
 
     # d_Error_out = -(input_array[1] - out_fwd_O)
-    # print("d_Error_out", d_Error_out)
     # d_out_O = out_fwd_O*(1-out_fwd_O)
-    # print("d_out_O", d_out_O)
     # d_net_O = out_fwd_H
-    # print("d_net_O", d_net_O)
     Delta = -(input_array[1] - out_fwd_O)*(out_fwd_O*(1-out_fwd_O))*out_fwd_H
     # print("Delta", Delta)
-
-
-    # print("out_fwd_H.T\n", out_fwd_H.T)
-    # print("out_fwd_O", out_fwd_O*(1-out_fwd_O))
-    # print("target - out_fwd_O", (-(target - out_fwd_O)))
-    # print(target)
-
-    H_weights = H_weights - Eta * out_fwd_H * (-(target - out_fwd_O)) * (out_fwd_O*(1-out_fwd_O))
-    print(H_weights)
-
-    # H_weights = H_weights - Eta*(np.array(Delta).T)*out_fwd_O
-    # print("H_weights\n", H_weights)
-
-    # dE/dw5 = dE/doO1 * doO1/dnO1 * dnO1/dw5
-    # we know:  Eo1  -> dEo1/doO1
-    #           oO1  -> doO1/dnO1
-    #           noO1 -> dnO1/dw5
 
     # E = Σ 0.5*square(target_x - out_x)
     # dEo1/doO1 = -(t01 - oO1)
@@ -125,5 +106,23 @@ for input_array in input_arrays:
     # dnoO/dWx = oOx
     # Delta = dEo1/dnoO)
     # DE/dwx = Delta*out
+
+    H_weights = H_weights - Eta * out_fwd_H * (-(target - out_fwd_O)) * (out_fwd_O*(1-out_fwd_O))
+    print(H_weights)
+
+    # effect of change in hidden layer node will propagate to all Output Nodes
+    # dE/doH1 = Σ dEoOx/doH1
+    # dEoO1/doH1
+    I_weights = I_weights - Eta * out
+
+    # H_weights = H_weights - Eta*(np.array(Delta).T)*out_fwd_O
+    # print("H_weights\n", H_weights)
+
+    # dE/dw5 = dE/doO1 * doO1/dnO1 * dnO1/dw5
+    # we know:  Eo1  -> dEo1/doO1
+    #           oO1  -> doO1/dnO1
+    #           noO1 -> dnO1/dw5
+
+
 
 
