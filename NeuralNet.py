@@ -1,5 +1,8 @@
 import numpy as np
 
+# http://neuralnetworksanddeeplearning.com/chap1.html
+# https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
+
 # numpy axis:   down = 0
 #               right = 1
 
@@ -10,9 +13,17 @@ import numpy as np
 #   Ic -< H3 -< Oz
 #   b1    b2
 
-#   Ia x (Wa1 Wa2 Wa3) = H1
-#   Ib x (Wb1 Wb2 Wb3) = H2
-#   Ic x (Wc1 Wc2 Wc3) = H3
+#   Ia x (Wa1 Wa2 Wa3) = net(H1)
+#   Ib x (Wb1 Wb2 Wb3) = net(H2)
+#   Ic x (Wc1 Wc2 Wc3) = net(H3)
+
+"""
+Ia x-> Wa1 Wa2 
+Ib x-> Wb1 Wb2  
+sum columns for net(H)
+
+"""
+
 
 """
    ___               ___
@@ -36,39 +47,83 @@ import numpy as np
 def evendist(len):
     return np.array(np.array_split([x/((len**2)-1) for x in range(len**2)], len))
 
-def sig(input):
+def sigmoid(input):
     """Returns list of sigmoid functions for input list"""
-    return np.array([  1 / (1 + np.exp(-z)) for z in input   ])
+    return np.array([[  1 / (1 + np.exp(-z)) for z in input   ]])
 
 
-input_lists = [[1, 10, 100]]
+input_arrays = [[[0.05, 0.10], [0.01, 0.99]]]
+for x in input_arrays:
+    x[0] = np.array(x[0])
+    x[1] = np.array(x[1])
+
 b1 = 0.35
 b2 = 0.60
-length = len(input_lists[0])
-l1_weights = evendist(length)
+Eta = 0.5 # Learning rate
 
-li_weights = np.array([[0.15,0.2],[]])
+length = len(input_arrays[0])
+I_weights = evendist(length)
 
+I_weights = np.array([[0.15, 0.25], [0.20, 0.30]])
+H_weights = np.array([[0.40, 0.50], [0.45, 0.55]])
+# print(I_weights)
 
-for input_list in input_lists:
-    in_np = np.array([input_list]).T
-    # needs to be "[[2 dimentional]]" to transpose
-    # in_T = in_np.T
+for input_array in input_arrays:
+    print("H_weights\n", H_weights)
+    target = input_array[1]
+    fwd_I = np.array([input_array[0]]).T
 
     # print(l1_weights[:, 1])
     # print(l1_weights[1, :])
 
-    net_fwd_in = np.multiply(in_np, l1_weights).sum(axis=1) + b1
-    out_fwd_in = sig(net_fwd_in)
-    print(net_fwd_in, type(net_fwd_in))
-    print(out_fwd_in, type(out_fwd_in))
+    # net_fwd_H = (fwd_I * I_weights).sum(axis=0) + b1
+    out_fwd_H = sigmoid((fwd_I * I_weights).sum(axis=0) + b1)
+    # print(out_fwd_H)
+
+    # print(net_fwd_in, type(net_fwd_in))
+    # print(out_fwd_in, type(out_fwd_in))
+
+    # net_fwd_O = (out_fwd_H * H_weights).sum(axis=0) + b2
+    out_fwd_O = sigmoid((out_fwd_H * H_weights).sum(axis=0) + b2)
+    # print(out_fwd_O)
+
+    Error = 0.5*np.square(input_array[1]-out_fwd_O)
+    # print("Error", Error)
+
+    # d_Error_out = -(input_array[1] - out_fwd_O)
+    # print("d_Error_out", d_Error_out)
+    # d_out_O = out_fwd_O*(1-out_fwd_O)
+    # print("d_out_O", d_out_O)
+    # d_net_O = out_fwd_H
+    # print("d_net_O", d_net_O)
+    Delta = -(input_array[1] - out_fwd_O)*(out_fwd_O*(1-out_fwd_O))*out_fwd_H
+    # print("Delta", Delta)
 
 
+    # print("out_fwd_H.T\n", out_fwd_H.T)
+    # print("out_fwd_O", out_fwd_O*(1-out_fwd_O))
+    # print("target - out_fwd_O", (-(target - out_fwd_O)))
+    # print(target)
 
+    H_weights = H_weights - Eta * out_fwd_H * (-(target - out_fwd_O)) * (out_fwd_O*(1-out_fwd_O))
+    print(H_weights)
 
-    # ran = (np.random.random_sample(size=(1,5)) - 0.5)*2
-    # print(ran)
+    # H_weights = H_weights - Eta*(np.array(Delta).T)*out_fwd_O
+    # print("H_weights\n", H_weights)
 
+    # dE/dw5 = dE/doO1 * doO1/dnO1 * dnO1/dw5
+    # we know:  Eo1  -> dEo1/doO1
+    #           oO1  -> doO1/dnO1
+    #           noO1 -> dnO1/dw5
 
+    # E = Σ 0.5*square(target_x - out_x)
+    # dEo1/doO1 = -(t01 - oO1)
+    # oOx = sigmoid(nOx)
+    # The partial derivative of the logistic function is the output multiplied by 1 minus the output:
+    # doOx/dnoOx = oOx(1-oOx)
+    # noO = Σ( oOxWx ) + b2
+    # dnoO/dWx = oOx
+    # Delta = dEo1/dnoO)
+    # DE/dwx = Delta*out
 
 
