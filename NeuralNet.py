@@ -18,7 +18,8 @@ import numpy as np
 #   Ib x (Wb1 Wb2 Wb3) = net(H2)
 #   Ic x (Wc1 Wc2 Wc3) = net(H3)
 
-Err = """
+# Err =
+"""
    ___               ___
   |. .|             |. .|
   |_c_|             |_-_|
@@ -55,7 +56,7 @@ for x in input_arrays:
 runcount = 1
 b1 = 0.35
 b2 = 0.60
-Eta = 0.5 # Learning rate
+Eta = 0.5  # Learning rate
 
 length = len(input_arrays[0])
 I_weights = evendist(length)
@@ -63,7 +64,7 @@ I_weights = evendist(length)
 I_weights = np.array([[0.15, 0.25], [0.20, 0.30]])
 H_weights = np.array([[0.40, 0.50], [0.45, 0.55]])
 # print(I_weights)
-print("H_weights\n", H_weights)
+# print("H_weights\n", H_weights)
 
 for x in range(runcount):
     for input_array in input_arrays:
@@ -74,6 +75,7 @@ for x in range(runcount):
         # print(l1_weights)
         # print(l1_weights[1, :])
 
+        # --> FORWARD PASS
         # net_fwd_H = (fwd_I * I_weights).sum(axis=0) + b1
         out_fwd_H = sigmoid((fwd_I * I_weights).sum(axis=0) + b1)
 
@@ -81,6 +83,7 @@ for x in range(runcount):
         out_fwd_O = sigmoid((out_fwd_H * H_weights).sum(axis=0) + b2)
 
         Error = 0.5*np.square(target-out_fwd_O)
+        # <-- FORWARD PASS
 
         # E = Σ 0.5*square(target_x - out_fwd_O)
         # dE/doO = -(target - out_fwd_O)
@@ -105,7 +108,11 @@ for x in range(runcount):
         # dEoO1/doH1 = dEoO1/dnO1 * dnO1/doH1
         # dEoO/doO = - (t-oO)
         # doO/dnO = nO(1-nO)
-
+        # dnO1 / doH1 = w5
+        # dE1_dnO1 = - (t-oO)*nO(1-nO)
+        # dE1/doH1 = - (t-oO)*nO(1-nO)*w5
+        print("DELTA",(Delta_O.T))
+        # dE_doH =
         # I_weights = I_weights - Eta * out
 
         # H_weights = H_weights - Eta*(np.array(Delta).T)*out_fwd_O
