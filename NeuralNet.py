@@ -1,6 +1,5 @@
 import numpy as np
 
-# asdfasdfasdf
 # http://neuralnetworksanddeeplearning.com/chap1.html
 # https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
 
@@ -18,7 +17,13 @@ import numpy as np
 #   Ib x (Wb1 Wb2 Wb3) = net(H2)
 #   Ic x (Wc1 Wc2 Wc3) = net(H3)
 
-# Err =
+"""
+      O1  O2
+       ↓   ↓
+H1 → wa1 wa2
+H2 → wb1 wb2
+      t1  t2
+"""
 """
    ___               ___
   |. .|             |. .|
@@ -32,11 +37,7 @@ import numpy as np
 
 
 # a = np.array([[1, 2, 3]]).T
-# print(a)
 # b = np.ones((3,3))
-#
-# print( a+b )
-# b = np.array("")
 
 def evendist(len):
     return np.array(np.array_split([x/((len**2)-1) for x in range(len**2)], len))
@@ -72,6 +73,28 @@ for x in range(runcount):
         target = input_array[1]
         fwd_I = np.array([input_array[0]]).T
 
+        # --> FORWARD PASS
+        out_fwd_H = sigmoid((fwd_I * I_weights).sum(axis=0) + b1)
+        out_fwd_O = sigmoid((out_fwd_H * H_weights).sum(axis=0) + b2)
+        # <-- FORWARD PASS
+
+        Delta_O = (-(target-out_fwd_O))*(out_fwd_O*(1-out_fwd_O))
+        Delta_H = (-(target-out_fwd_H))*(out_fwd_H*(1-out_fwd_H))
+
+        I_weights = I_weights - Eta * fwd_I*(Delta_O*H_weights).sum(axis=1)*out_fwd_H*(1-out_fwd_H)
+        H_weights = H_weights - Eta * out_fwd_H * Delta_O
+
+# print("I_weights", I_weights)
+# print("H_weights", H_weights)
+# print("Final Out:", out_fwd_O)
+
+"""
+for x in range(runcount):
+    for input_array in input_arrays:
+
+        target = input_array[1]
+        fwd_I = np.array([input_array[0]]).T
+
         # print(l1_weights)
         # print(l1_weights[1, :])
 
@@ -100,9 +123,6 @@ for x in range(runcount):
         # dnoO/dW = oH
         # dE/W = dE/doO*doO/dnoO*dnoO/dW = Delta*out
 
-        H_weights = H_weights - Eta * out_fwd_H * Delta_O
-        print("H_weights", H_weights)
-
         # effect of change in hidden layer node will propagate to all Output Nodes
         # dE/doH = Σ dEoOx/doH
         # dEoO1/doH1 = dEoO1/dnO1 * dnO1/doH1
@@ -111,11 +131,28 @@ for x in range(runcount):
         # dnO1 / doH1 = w5
         # dE1_dnO1 = - (t-oO)*nO(1-nO)
         # dE1/doH1 = - (t-oO)*nO(1-nO)*w5
-        print("DELTA",(Delta_O.T))
+        # print("dE_dH",(Delta_O*H_weights).sum(axis=1))
+
+        # dE/dw = dE/doH * doH/dnH * dnH/dw
+        # doH/dnH = oH(1-oH)
+        # dnH/dw = i
+
+        # dE_dw = fwd_I*(Delta_O*H_weights).sum(axis=1)*out_fwd_H*(1-out_fwd_H)
+        # print(dE_dw)
+
+        I_weights = I_weights - Eta * fwd_I*(Delta_O*H_weights).sum(axis=1)*out_fwd_H*(1-out_fwd_H)
+        # print("I_weights", I_weights)
+
+        # H_weights = H_weights - Eta*(np.array(Delta).T)*out_fwd_O
+        H_weights = H_weights - Eta * out_fwd_H * Delta_O
+        # print("H_weights", H_weights)
+
+
+
         # dE_doH =
         # I_weights = I_weights - Eta * out
 
-        # H_weights = H_weights - Eta*(np.array(Delta).T)*out_fwd_O
+
         # print("H_weights\n", H_weights)
 
         # dE/dw5 = dE/doO1 * doO1/dnO1 * dnO1/dw5
@@ -124,6 +161,6 @@ for x in range(runcount):
         #           noO1 -> dnO1/dw5
 
 
-# print("Final Out:", out_fwd_O)
-
+print("Final Out:", out_fwd_O)
+"""
 
