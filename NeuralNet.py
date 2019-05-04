@@ -1,7 +1,15 @@
+# https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
 import numpy as np
 
-# http://neuralnetworksanddeeplearning.com/chap1.html
-# https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
+
+def evendist(len):
+    return np.array(np.array_split([x/((len**2)-1) for x in range(len**2)], len))
+
+
+def sigmoid(np_input):
+    """Returns list of sigmoid functions for input list"""
+    return np.array([[  1 / (1 + np.exp(-z)) for z in np_input   ]])
+
 
 input_arrays = [[[0.05, 0.10], [0.01, 0.99]]]# , [[0.1, 0.05],[0.02, 0.98]]]
 
@@ -42,13 +50,7 @@ for x in range(runcount):
 print("Final Out:", out_fwd_O)
 
 
-def evendist(len):
-    return np.array(np.array_split([x/((len**2)-1) for x in range(len**2)], len))
 
-
-def sigmoid(np_input):
-    """Returns list of sigmoid functions for input list"""
-    return np.array([[  1 / (1 + np.exp(-z)) for z in np_input   ]])
 
 # numpy axis:   down  --> (axis=0) or ndarray[:, 1]
 #               right --> (axis=1) or ndarray[1, :]
