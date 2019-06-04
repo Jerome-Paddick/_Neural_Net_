@@ -1,5 +1,7 @@
 # _Neural_Net_
 
+# This directory is where I store my machine learning projects
+
 # ///// NeuralNet.py /////
 
 # https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
